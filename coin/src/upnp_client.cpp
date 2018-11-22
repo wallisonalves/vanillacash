@@ -99,7 +99,7 @@ void upnp_client::add_mapping(
             
             mappings_.push_back(m);
 
-			log_info("UPnP client queued mapping.");
+            log_info("UPnP client queued mapping.");
         }
     }
 }
@@ -148,7 +148,7 @@ void upnp_client::do_add_mapping(
     )
 {
 #if (defined USE_UPNP && USE_UPNP)
-	log_info("UPnP client is adding mapping.");
+    log_info("UPnP client is adding mapping.");
 
     if (discovery_did_succeed_)
     {
@@ -180,10 +180,10 @@ void upnp_client::do_add_mapping(
                 {
                     found = true;
                     
-					i.protocol = protocol;
-					i.internal_port = port;
-					i.external_port = port;
-					i.time = std::time(0);
+                    i.protocol = protocol;
+                    i.internal_port = port;
+                    i.external_port = port;
+                    i.time = std::time(0);
 
                     break;
                 }
@@ -206,8 +206,8 @@ void upnp_client::do_add_mapping(
             log_error("UPnP client add mapping failed " << ret << ".");
         }
     }
-	else
-	{
+    else
+    {
         bool found = false;
         
         for (auto & i : mappings_)
@@ -234,9 +234,9 @@ void upnp_client::do_add_mapping(
             
             mappings_.push_back(m);
 
-			log_info("UPnP client queued mapping.");
+            log_info("UPnP client queued mapping.");
         }
-	}
+    }
 #endif // USE_UPNP
 }
 
@@ -295,12 +295,12 @@ void upnp_client::do_discover_devices()
                 " services."
             );
             
-			auto timeout = std::chrono::seconds(900);
+            auto timeout = std::chrono::seconds(900);
 
-			if (mappings_.size() > 0)
-			{
-				timeout = std::chrono::seconds(3);
-			}
+            if (mappings_.size() > 0)
+            {
+                timeout = std::chrono::seconds(3);
+            }
 
             /**
              * Start the timer.

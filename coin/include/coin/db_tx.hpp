@@ -22,13 +22,7 @@
 #ifndef COIN_DB_TX_HPP
 #define COIN_DB_TX_HPP
 
-#define USE_LEVELDB 0
-
-#if (defined USE_LEVELDB && USE_LEVELDB)
-#include <coin/db_tx_ldb.hpp>
-#else
 #include <coin/db_tx_bdb.hpp>
-#endif // USE_LEVELDB
 
 namespace coin {
 
@@ -36,4 +30,4 @@ namespace coin {
     
 } // namespace coin
 
-#endif // COIN_DB_TX_HPP
+#endif //COIN_DB_TX_HPP

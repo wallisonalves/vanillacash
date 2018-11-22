@@ -444,7 +444,7 @@ bool message::decode()
                         byte_buffer_.read_bytes(buf.get(), attribute_length);
                     }
                 }
-                break;	
+                break;
             }
 
             std::uint16_t padding = attribute_length % 4 == 0 ? 0 : 4 -

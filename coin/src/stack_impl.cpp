@@ -690,10 +690,10 @@ void stack_impl::start()
                      */
                     if (first_run)
                     {
-						/**
-						 * Get the db_wallet.
-						 */
-						db_wallet wallet_db("wallet.dat");
+                        /**
+                         * Get the db_wallet.
+                         */
+                        db_wallet wallet_db("wallet.dat");
 
                        /**
                         * Set the creation timestamp.
@@ -707,7 +707,7 @@ void stack_impl::start()
                          */
                         wallet_db.write_timestamp(std::time(0));
                         
-						/**
+                        /**
                          * Use the latest wallet features for new wallets.
                          */
                         globals::instance().wallet_main()->set_min_version(
@@ -2105,7 +2105,9 @@ void stack_impl::start()
             /**
              * Download centrally hosted bootstrap peers.
              */
-            do_check_peers(0);
+#if 0
+            do_check_peers(0); // <-- stop sniffing everyone who wants peer list 
+#endif
         }));
     }));
     
@@ -3571,12 +3573,12 @@ void stack_impl::url_get(
         if (ec)
         {
             f(std::map<std::string, std::string> (), std::string());
-		}
-		else
-		{
+        }
+        else
+        {
             f(t->headers(), t->response_body());
-		}
-	});
+        }
+    });
 }
 
 void stack_impl::url_post(
@@ -3602,12 +3604,12 @@ void stack_impl::url_post(
         if (ec)
         {
             f(std::map<std::string, std::string> (), std::string());
-		}
-		else
-		{
+        }
+        else
+        {
             f(t->headers(), t->response_body());
-		}
-	}, port);
+        }
+    }, port);
 }
 
 bool stack_impl::process_block(

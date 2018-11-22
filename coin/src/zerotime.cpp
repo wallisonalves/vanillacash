@@ -252,7 +252,7 @@ void zerotime::clear_expired_input_locks()
 
 std::int16_t zerotime::calculate_score(const key_public & public_key)
 {
-	std::int16_t ret = -1;
+    std::int16_t ret = -1;
     
     /**
      * Get the best block index.
@@ -325,26 +325,26 @@ std::int16_t zerotime::calculate_score(const key_public & public_key)
 
 std::int16_t zerotime::calculate_score(const zerotime_vote & ztvote)
 {
-	std::int16_t ret = -1;
+    std::int16_t ret = -1;
 
-	if (
+    if (
         globals::instance().is_client_spv() == false &&
         ztvote.block_height() == 0 ||
         ztvote.block_height() > globals::instance().best_block_height()
         )
-	{
+    {
         // ...
-	}
-	else if (
+    }
+    else if (
         globals::instance().is_client_spv() == true &&
         ztvote.block_height() == 0 ||
         ztvote.block_height() > globals::instance().spv_best_block_height()
         )
-	{
+    {
         // ...
-	}
-	else
-	{
+    }
+    else
+    {
         /**
          * Get the best block_index.
          */

@@ -8026,14 +8026,14 @@ rpc_connection::json_rpc_response_t rpc_connection::json_walletpassphrase(
         }
     }
     
-	return ret;
+    return ret;
 }
 
 rpc_connection::json_rpc_response_t rpc_connection::json_walletlock(
     const json_rpc_request_t & request
     )
 {
-	json_rpc_response_t ret;
+    json_rpc_response_t ret;
     
     if (globals::instance().wallet_main()->is_crypted() == false)
     {
@@ -8093,7 +8093,7 @@ rpc_connection::json_rpc_response_t
     const json_rpc_request_t & request
     )
 {
-	json_rpc_response_t ret;
+    json_rpc_response_t ret;
     
     if (request.params.size() != 2)
     {

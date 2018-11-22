@@ -31,6 +31,7 @@
 #include <windows.h>
 #endif // (defined _WIN32 || defined WIN32) || (defined _WIN64 || defined WIN64)
 
+#include <iomanip>
 #include <chrono>
 #include <iostream>
 #include <memory>
@@ -47,31 +48,31 @@ namespace database {
     {
         public:
             
-			/**
-			 * @param severity_none
-			 * @param severity_debug
-			 * @param severity_error
-			 * @param severity_info
-			 * @param severity_warning
-			 */
-			typedef enum severity
-			{
-				severity_none,
-				severity_debug,
-				severity_error,
-				severity_info,
-				severity_warning,
-			} severity_t;
-			
+            /**
+             * @param severity_none
+             * @param severity_debug
+             * @param severity_error
+             * @param severity_info
+             * @param severity_warning
+             */
+            typedef enum severity
+            {
+                severity_none,
+                severity_debug,
+                severity_error,
+                severity_info,
+                severity_warning,
+            } severity_t;
+            
             /**
              * Singleton accessor.
              */
-			static logger & instance()
-			{
-			    static logger g_logger;
+            static logger & instance()
+            {
+                static logger g_logger;
 
-			    return g_logger;
-			}
+                return g_logger;
+            }
             
             /**
              * operator <<
@@ -94,99 +95,95 @@ namespace database {
              * Perform the actual logging.
              * @param val
              */
-			void log(std::stringstream & val)
-			{
-				std::lock_guard<std::recursive_mutex> lock(mutex_);
-				
-			    static const bool use_file = false;
+            void log(std::stringstream & val)
+            {
+                std::lock_guard<std::recursive_mutex> lock(mutex_);
+                
+                static const bool use_file = false;
 
-			    if (use_file)
-			    {
+                if (use_file)
+                {
                     // ...
-			    }
+                }
 
-			    static bool use_cout = true;
+                static bool use_cout = true;
 
-			    if (use_cout)
-			    {
+                if (use_cout)
+                {
 #if (defined _WIN32 || defined WIN32) || (defined _WIN64 || defined WIN64)
 #if defined(_UNICODE)
-			        DWORD len = MultiByteToWideChar(
-			            CP_ACP, 0, val.str().c_str(), -1, NULL, 0
-			        );
+                    DWORD len = MultiByteToWideChar(
+                        CP_ACP, 0, val.str().c_str(), -1, NULL, 0
+                    );
 
-			        std::unique_ptr<wchar_t> buf(new wchar_t[len]);
+                    std::unique_ptr<wchar_t> buf(new wchar_t[len]);
 
-			        MultiByteToWideChar(
-			            CP_ACP, 0, val.str().c_str(), -1, buf.get(), len
-			        );
+                    MultiByteToWideChar(
+                        CP_ACP, 0, val.str().c_str(), -1, buf.get(), len
+                    );
 
-			        OutputDebugString(buf.get());
-			        OutputDebugString(L"\n");
+                    OutputDebugString(buf.get());
+                    OutputDebugString(L"\n");
 
-			        std::cerr << val.str() << std::endl;
+                    std::cerr << val.str() << std::endl;
 #else
-			        OutputDebugString(val.str().c_str());
-			        OutputDebugString(L"\n");
+                    OutputDebugString(val.str().c_str());
+                    OutputDebugString(L"\n");
 
-			        std::cerr << val.str() << std::endl;
+                    std::cerr << val.str() << std::endl;
 #endif // _UNICODE
 #else // Not Windows.
 #if (defined __ANDROID__)
-					__android_log_print(
+                    __android_log_print(
                         ANDROID_LOG_DEBUG, "logger", val.str().c_str()
                     );
 #else
-			        std::cerr << val.str() << std::endl;
+                    std::cerr << val.str() << std::endl;
 #endif
 #endif // defined _WIN32 || defined WIN32) || (defined _WIN64 || defined WIN64
-			    }
-			}
+                }
+            }
             
         private:
         
-			// ...
+            // ...
             
         protected:
         
-			/**
-			 * The mutex.
-			 */
-			std::recursive_mutex mutex_;
+            /**
+             * The mutex.
+             */
+            std::recursive_mutex mutex_;
     };
     
     #define log_xx(severity, strm) \
     { \
-        std::time_t time_now = std::chrono::system_clock::to_time_t( \
-            std::chrono::system_clock::now()); \
-        std::string time_str = std::ctime(&time_now); \
-        time_str.pop_back(), time_str.pop_back(); \
-        time_str.pop_back(), time_str.pop_back(); \
-        time_str.pop_back(), time_str.pop_back(); \
+        std::time_t time_now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()); \
+        auto time_str = std::put_time(std::gmtime(&time_now), "%F %T"); \
         std::stringstream __ss; \
         switch (severity) \
         { \
             case database::logger::severity_debug: \
-                __ss << time_str << " database[DEBUG] - "; \
+                __ss << time_str << " [DEBUG] - "; \
             break; \
             case database::logger::severity_error: \
-                __ss << time_str << " database[ERROR] - "; \
+                __ss << time_str << " [ERROR] - "; \
             break; \
             case database::logger::severity_info: \
-                __ss << time_str << " database[INFO] - "; \
+                __ss << time_str << " [INFO] - "; \
             break; \
             case database::logger::severity_warning: \
-                __ss << time_str << " database[WARNING] - "; \
+                __ss << time_str << " [WARNING] - "; \
             break; \
             default: \
-                __ss << std::ctime(&time_now) << " database[UNKNOWN] - "; \
+                __ss << time_str << " [UNKNOWN] - "; \
         } \
-		__ss << __FUNCTION__ << ": "; \
+        __ss << __FUNCTION__ << ": "; \
         __ss << strm; \
         database::logger::instance() << __ss.str(); \
         __ss.str(std::string()); \
     } \
-	
+    
 #define log_none(strm) /** */
 #if (defined NDEBUG && !defined DEBUG)
 #define log_debug(strm) log_none(strm)

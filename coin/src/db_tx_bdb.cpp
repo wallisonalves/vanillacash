@@ -41,10 +41,6 @@
 
 using namespace coin;
 
-#if (defined USE_LEVELDB && USE_LEVELDB)
-    // ...
-#else
-
 db_tx::db_tx(const std::string & file_mode)
     : db("block-index-peer.dat", file_mode)
 {
@@ -1560,5 +1556,3 @@ bool db_tx::write(
     
     return ret == 0;
 }
-
-#endif // USE_LEVELDB

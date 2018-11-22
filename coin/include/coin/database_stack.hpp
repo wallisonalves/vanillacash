@@ -81,7 +81,7 @@ namespace coin {
         
             /**
              * Joins the overlay.
-			 * @param contacts The bootstrap contacts.
+             * @param contacts The bootstrap contacts.
              */
             void join(
                 const std::vector< std::pair<std::string, std::uint16_t> > &

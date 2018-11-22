@@ -142,12 +142,12 @@ std::array<std::uint8_t, whirlpool::digest_length / 2> hash::whirlpoolx(
     
     auto digest = whirlpool::hash(buf, len);
 
-	for (auto i = 0; i < (whirlpool::digest_length / 2); i++)
-	{
+    for (auto i = 0; i < (whirlpool::digest_length / 2); i++)
+    {
         ret[i] =
             digest[i] ^ digest[i + ((whirlpool::digest_length / 2) / 2)]
         ;
-	}
+    }
     
     return ret;
 }

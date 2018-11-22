@@ -3443,16 +3443,16 @@ bool wallet::create_coin_stake(
      * security reasons.
      */
     enum { stake_split_age = 60 * 60 * 24 * 30 };
-	
+
     auto index = utility::get_last_block_index(
         stack_impl::get_block_index_best(), false
     );
     
     std::int64_t combine_threshold = 0;
-	
+
     if (index->block_index_previous())
-	{
-    	combine_threshold = reward::get_proof_of_work(
+    {
+        combine_threshold = reward::get_proof_of_work(
             index->height(), constants::min_tx_fee,
             index->block_index_previous()->get_block_hash()) / 3
         ;
@@ -3560,7 +3560,7 @@ bool wallet::create_coin_stake(
         db_tx tx_db("r");
         
         transaction_index tx_index;
-			
+
         if (
             tx_db.read_transaction_index(pcoin.first.get_hash(),
             tx_index) == false
@@ -3587,7 +3587,7 @@ bool wallet::create_coin_stake(
         }
 
         static int max_stake_search_interval = 60;
-		
+
         /**
          * Check the minimum age.
          */
@@ -3748,9 +3748,9 @@ bool wallet::create_coin_stake(
     }
 
     if (credit == 0 || credit > balance - reserve_balance)
-	{
+    {
         return false;
-	}
+    }
 
     for (auto & pcoin : coins)
     {
@@ -4639,7 +4639,7 @@ std::string wallet::hd_keychain_seed()
     key k;
     
     if (m_hd_configuration.id_key_master().is_empty() == false)
-	{
+    {
         if (get_key(m_hd_configuration.id_key_master(), k) == false)
         {
             log_error("wallet::generate_new_key(): Key master not found");
@@ -4653,8 +4653,8 @@ std::string wallet::hd_keychain_seed()
             ret = utility::hex_string(seed);
             
             log_debug("Wallet, seed = " << ret << ".");
-   	     }
-	}
+        }
+    }
     
     return ret;
 }

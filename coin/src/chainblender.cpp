@@ -91,7 +91,7 @@ std::int16_t chainblender::calculate_score(
     const boost::asio::ip::tcp::endpoint & ep
     )
 {
-	std::int16_t ret = -1;
+    std::int16_t ret = -1;
 
     auto index = utility::find_block_index_by_height(
         globals::instance().best_block_height()

@@ -135,16 +135,16 @@ namespace database {
             
             /**
              * Joins the overlay.
-			 * @param contacts The bootstrap contacts.
+             * @param contacts The bootstrap contacts.
              */
             void join(
                 const std::vector< std::pair<std::string, unsigned short> > &
             );
             
-			/**
-			 * Leaves the overlay.
-			 */
-			void leave();
+            /**
+             * Leaves the overlay.
+             */
+            void leave();
         
             /**
              * Performs a store operation.

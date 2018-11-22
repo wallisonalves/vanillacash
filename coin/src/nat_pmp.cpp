@@ -32,17 +32,17 @@ std::string nat_pmp::opcode_to_string(const std::uint32_t & opcode)
         case error_code_invalid_args:
         {
             ret = "invalid arguments";
-    	}
+        }
         break;
         case error_code_socket_error:
         {
            ret = "socket() failed";
-    	}
+        }
         break;
         case error_code_cannot_get_gateway:
         {
             ret = "cannot get default gateway ip address";
-    	}
+        }
         break;
         case result_opcode_out_of_resources:
         {
@@ -51,7 +51,7 @@ std::string nat_pmp::opcode_to_string(const std::uint32_t & opcode)
                 "this time)"
             ;
         }
-    	break;
+        break;
         case result_opcode_network_failure:
         {
             ret =

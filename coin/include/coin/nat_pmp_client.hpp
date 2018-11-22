@@ -51,7 +51,7 @@ namespace coin {
             
             /**
              * Stops the nat-pmp client removing all mappings.
-			 * @param unmap
+             * @param unmap
              */
             void stop(const bool & unmap = true);
         
@@ -132,13 +132,13 @@ namespace coin {
              * Asynchronous cannot handler.
              */
             void handle_connect(const boost::system::error_code & ec);
-			
-			/**
-			 * The timeout handler.
-			 * @param ec
-			 */
-			void handle_timeout(const boost::system::error_code &);
-			
+            
+            /**
+             * The timeout handler.
+             * @param ec
+             */
+            void handle_timeout(const boost::system::error_code &);
+            
             /**
              * Asynchronous receive from handler.
              */
@@ -189,10 +189,10 @@ namespace coin {
              */
             boost::asio::deadline_timer retry_timer_;
             
-			/**
-			 * The mapping refresh timer.
-			 */
-			boost::asio::deadline_timer refresh_timer_;
+            /**
+             * The mapping refresh timer.
+             */
+            boost::asio::deadline_timer refresh_timer_;
                         
             /**
              * The udp socket.

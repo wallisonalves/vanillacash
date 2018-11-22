@@ -79,17 +79,17 @@ std::map<std::uint32_t, std::set<std::string> > & incentive::runners_up()
 
 std::int16_t incentive::calculate_score(const incentive_vote & ivote)
 {
-	std::int16_t ret = -1;
+    std::int16_t ret = -1;
 
-	if (
+    if (
         ivote.block_height() == 0 ||
         ivote.block_height() > globals::instance().best_block_height()
         )
-	{
+    {
         // ...
-	}
-	else
-	{
+    }
+    else
+    {
         auto index = utility::find_block_index_by_height(
             ivote.block_height()
         );
@@ -152,7 +152,7 @@ std::int16_t incentive::calculate_score(
     const boost::asio::ip::tcp::endpoint & ep
     )
 {
-	std::int16_t ret = -1;
+    std::int16_t ret = -1;
 
     auto index = utility::find_block_index_by_height(
         globals::instance().best_block_height()

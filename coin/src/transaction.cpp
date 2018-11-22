@@ -425,7 +425,7 @@ bool transaction::is_standard()
         /**
          * Ban any transactions here if needed.
          */
-	}
+    }
 
     for (auto & i : m_transactions_out)
     {

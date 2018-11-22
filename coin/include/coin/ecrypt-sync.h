@@ -374,52 +374,52 @@ void ECRYPT_keystream_blocks(
 
 
 static u32 h1(ECRYPT_ctx* ctx, u32 u) {
-	u32 tem; 			
-	unsigned char a,b,c,d;			
-	a = (unsigned char) ((u));		
-	b = (unsigned char) ((u) >> 8);	
-	c = (unsigned char) ((u) >> 16);	
-	d = (unsigned char) ((u) >> 24);	
-	tem = ctx->Q[a]+ctx->Q[256+b]+ctx->Q[512+c]+ctx->Q[768+d];
-	return (tem);
+    u32 tem;
+    unsigned char a,b,c,d;
+    a = (unsigned char) ((u));
+    b = (unsigned char) ((u) >> 8);
+    c = (unsigned char) ((u) >> 16);
+    d = (unsigned char) ((u) >> 24);
+    tem = ctx->Q[a]+ctx->Q[256+b]+ctx->Q[512+c]+ctx->Q[768+d];
+    return (tem);
 }
 
 
 
 static u32 h2(ECRYPT_ctx* ctx, u32 u) {
-	u32 tem; 			
-	unsigned char a,b,c,d;			
-	a = (unsigned char) ((u));		
-	b = (unsigned char) ((u) >> 8);	
-	c = (unsigned char) ((u) >> 16);	
-	d = (unsigned char) ((u) >> 24);	
-	tem = ctx->P[a]+ctx->P[256+b]+ctx->P[512+c]+ctx->P[768+d];
-	return (tem);
+    u32 tem;
+    unsigned char a,b,c,d;    
+    a = (unsigned char) ((u));
+    b = (unsigned char) ((u) >> 8);
+    c = (unsigned char) ((u) >> 16);
+    d = (unsigned char) ((u) >> 24);
+    tem = ctx->P[a]+ctx->P[256+b]+ctx->P[512+c]+ctx->P[768+d];
+    return (tem);
 }
 
 
 
 static u32 generate(ECRYPT_ctx* ctx) /*one step of the cipher*/
 {
-		u32 i,i3, i10, i12, i1023;
-		u32 output;
+        u32 i,i3, i10, i12, i1023;
+        u32 output;
 
-		i   = ctx->counter2048 & 0x3ff;
-		i3  = (i - 3) & 0x3ff;
-		i10 = (i - 10) & 0x3ff;
-		i12 = (i - 12) & 0x3ff;
-		i1023 = (i - 1023) & 0x3ff;
+        i   = ctx->counter2048 & 0x3ff;
+        i3  = (i - 3) & 0x3ff;
+        i10 = (i - 10) & 0x3ff;
+        i12 = (i - 12) & 0x3ff;
+        i1023 = (i - 1023) & 0x3ff;
 
-		if (ctx->counter2048 < 1024) {
-			ctx->P[i] = ctx->P[i] + ctx->P[i10] + (ROTR32(ctx->P[i3],10)^ROTR32(ctx->P[i1023],23))+ctx->Q[(ctx->P[i3]^ctx->P[i1023])&0x3ff];
-			output = h1(ctx,ctx->P[i12]) ^ ctx->P[i];
-		}
-		else {                                   
-			ctx->Q[i] = ctx->Q[i] + ctx->Q[i10] + (ROTR32(ctx->Q[i3],10)^ROTR32(ctx->Q[i1023],23))+ctx->P[(ctx->Q[i3]^ctx->Q[i1023])&0x3ff];
-			output = h2(ctx, ctx->Q[i12]) ^ ctx->Q[i];
-		}
-		ctx->counter2048 = (ctx->counter2048+1) & 0x7ff;
-		return (output);
+        if (ctx->counter2048 < 1024) {
+            ctx->P[i] = ctx->P[i] + ctx->P[i10] + (ROTR32(ctx->P[i3],10)^ROTR32(ctx->P[i1023],23))+ctx->Q[(ctx->P[i3]^ctx->P[i1023])&0x3ff];
+            output = h1(ctx,ctx->P[i12]) ^ ctx->P[i];
+        }
+        else {                                   
+            ctx->Q[i] = ctx->Q[i] + ctx->Q[i10] + (ROTR32(ctx->Q[i3],10)^ROTR32(ctx->Q[i1023],23))+ctx->P[(ctx->Q[i3]^ctx->Q[i1023])&0x3ff];
+            output = h2(ctx, ctx->Q[i12]) ^ ctx->Q[i];
+        }
+        ctx->counter2048 = (ctx->counter2048+1) & 0x7ff;
+        return (output);
 }
 
 
@@ -443,8 +443,8 @@ static void ECRYPT_keysetup(
   
   for (i = 0; i < 8; i++) ctx->key[i] = 0;
   for (i = 0; (i < ctx->keysize) & (i < 32); i++) {
-	  	ctx->key[i >> 2] =  ctx->key[i >> 2] | key[i];
-		ctx->key[i >> 2] = ROTL32(ctx->key[i >> 2],8);
+        ctx->key[i >> 2] =  ctx->key[i >> 2] | key[i];
+        ctx->key[i >> 2] = ROTL32(ctx->key[i >> 2],8);
   }
  
 } /* initialize the key, save the iv size*/
@@ -461,24 +461,24 @@ static void ECRYPT_ivsetup(
     /* initialize the iv */
     for (i = 0; i < 8; i++) ctx->iv[i] = 0;
     for (i = 0; (i < ctx->ivsize) & (i < 32); i++) {
-		ctx->iv[i >> 2] =  ctx->iv[i >> 2] | iv[i];
-		ctx->iv[i >> 2] = ROTL32(ctx->iv[i >> 2],8);
+        ctx->iv[i >> 2] =  ctx->iv[i >> 2] | iv[i];
+        ctx->iv[i >> 2] = ROTL32(ctx->iv[i >> 2],8);
     }
   
     /* setup the table P and Q */ 
 
-	for (i = 0; i < 8;  i++) W[i] = ctx->key[i];
-	for (i = 8; i < 16; i++) W[i] = ctx->iv[i-8];
+    for (i = 0; i < 8;  i++) W[i] = ctx->key[i];
+    for (i = 8; i < 16; i++) W[i] = ctx->iv[i-8];
 
-	for (i = 16; i < 2560; i++) W[i] = f2(W[i-2]) + W[i-7] + f1(W[i-15]) + W[i-16]+i; 
+    for (i = 16; i < 2560; i++) W[i] = f2(W[i-2]) + W[i-7] + f1(W[i-15]) + W[i-16]+i; 
 
-	for (i = 0; i < 1024; i++)  ctx->P[i] = W[i+512];
-	for (i = 0; i < 1024; i++)  ctx->Q[i] = W[i+1536];
+    for (i = 0; i < 1024; i++)  ctx->P[i] = W[i+512];
+    for (i = 0; i < 1024; i++)  ctx->Q[i] = W[i+1536];
 
-	ctx->counter2048 = 0;
+    ctx->counter2048 = 0;
       
       /* run the cipher 4096 steps before generating the output */
-	for (i = 0; i < 4096; i++)  generate(ctx);  
+    for (i = 0; i < 4096; i++)  generate(ctx);  
 }
 
 
@@ -497,16 +497,16 @@ static void ECRYPT_process_bytes(
   for (i = 0; i < msglen32; i++) { 
       keystreamword = generate(ctx);                 /*generate a 32-bit word*/
       for (j = 0; j < 4; j++) {
-	      *output = *input ^ keystreamword;       /*encrypt one byte*/
+          *output = *input ^ keystreamword;       /*encrypt one byte*/
           output += 1; 
           input +=1;
-		  keystreamword = keystreamword >> 8;
-	  }
+          keystreamword = keystreamword >> 8;
+      }
   }  
 
   keystreamword = generate(ctx);
   for (i = 0; i < (msglen & 3); i++) {
- 	  *output = *input ^ keystreamword;       /*encrypt one byte*/
+       *output = *input ^ keystreamword;       /*encrypt one byte*/
       output += 1; 
       input +=1;
       keystreamword = keystreamword >> 8;

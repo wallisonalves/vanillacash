@@ -1039,7 +1039,9 @@ void tcp_connection::on_read(const char * buf, const std::size_t & len)
                     user_agent + "\"""," +
                     "\"height\":\"" +
                     std::to_string(
-                    stack_impl::get_block_index_best()->height()) + "\"""}"
+                    stack_impl::get_block_index_best()->height()) + "\"""," +
+                    "\"trust\":\"" +
+                    stack_impl::get_best_chain_trust().to_string() + "\"""}"
                 ;
                 
                 /**

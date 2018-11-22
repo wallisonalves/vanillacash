@@ -138,6 +138,15 @@ checkpoints::checkpoints()
     m_checkpoints[645000] = sha256(
         "fcc3b088fc3995619f00858feacd07e85ca2572e2137822a4f529340b8fa9563"
     );
+    m_checkpoints[800000] = sha256(
+        "000000000000d0e25294a6527f32c64853b3605a5fccf4401d639bf12b653dca"
+    );
+    m_checkpoints[965000] = sha256(
+        "9698368e2fa298a2989c3225aa135489c6baa6725292c34f6e70a7b8d349c1db"
+    );
+    m_checkpoints[1040000] = sha256(
+        "ee5da920c2fd41a19a6b877d14981ea5914ebf690f5efb0f001e8503e670defd"
+    );
     
     m_checkpoints_test_net[0] = block::get_hash_genesis_test_net();
 }
@@ -385,11 +394,11 @@ std::map<std::int32_t, std::pair<sha256, std::time_t> >
         return ret;
     }
 
-	ret[0] = std::make_pair(sha256(
-		"15e96604fbcf7cd7e93d072a06f07ccfe1f8fd0099270a075c761c447403a783"),
+    ret[0] = std::make_pair(sha256(
+        "15e96604fbcf7cd7e93d072a06f07ccfe1f8fd0099270a075c761c447403a783"),
         1419310800
-	);
-	ret[4000] = std::make_pair(sha256(
+    );
+    ret[4000] = std::make_pair(sha256(
         "0000005daa461b5330897b9e8149142d6556fff12fcdf7b77eb40a6d76f1f3ad"),
         1419506259
     );
@@ -529,7 +538,19 @@ std::map<std::int32_t, std::pair<sha256, std::time_t> >
         "fcc3b088fc3995619f00858feacd07e85ca2572e2137822a4f529340b8fa9563"),
         1491624221
     );
-    
+    ret[800000] = std::make_pair(sha256(
+        "000000000000d0e25294a6527f32c64853b3605a5fccf4401d639bf12b653dca"),
+        1509052505
+    );
+    ret[965000] = std::make_pair(sha256(
+        "9698368e2fa298a2989c3225aa135489c6baa6725292c34f6e70a7b8d349c1db"),
+        1526128237
+    );
+    ret[1040000] = std::make_pair(sha256(
+        "ee5da920c2fd41a19a6b877d14981ea5914ebf690f5efb0f001e8503e670defd"),
+        1536464976
+    );
+
     return ret;
 }
 

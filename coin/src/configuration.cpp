@@ -23,6 +23,7 @@
 #include <fstream>
 #include <sstream>
 
+#include <boost/algorithm/string.hpp>
 #include <boost/asio.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -38,6 +39,8 @@
 #include <coin/wallet.hpp>
 
 using namespace coin;
+
+
 
 configuration::configuration()
     : m_network_port_tcp(protocol::default_tcp_port)
@@ -57,7 +60,21 @@ configuration::configuration()
     , m_wallet_deterministic(true)
     , m_db_private(false)
 {
-    // ...
+    std::vector< std::pair<std::string, std::uint16_t> > peers;
+    static const std::map<std::string, std::int32_t> ips =
+    {
+		{ "104.236.249.241", 35409 },
+		{ "138.68.165.224", 58589 },
+		{ "185.14.185.144", 38495 },
+		{ "163.172.142.82", 34621 }
+    };
+
+    for (auto &ip : ips)
+    {
+        peers.push_back(std::make_pair(ip.first, ip.second));
+    }
+
+    set_bootstrap_nodes(peers);
 }
 
 bool configuration::load()
@@ -87,6 +104,46 @@ bool configuration::load()
         log_debug("Configuration read version = " << file_version << ".");
         
         assert(file_version == version);
+
+        /**
+         * Get bootstrap nodes
+         */
+        auto & pos = pt.get_child("network.peers");
+        std::vector< std::pair<std::string, std::uint16_t> > peers;
+        for (auto pair : pos)
+        {
+            try {
+                std::vector<std::string> parts;
+                std::string endpoint = pair.second.get<std::string>("");
+                boost::split(parts, endpoint, boost::is_any_of(":"));
+                std::string ip = parts[0];
+                auto port = std::stoi(parts[1]);
+                //boost::system::error_code ec;
+                //boost::asio::ip::address::from_string(ip, ec);
+                //if (ec)
+                //{
+                //    log_error("Configuration failed to read a peer ip, what = " << ec.message() << ".")
+                //}
+                //else
+                //{
+                    peers.push_back(std::make_pair(ip, port));
+                    log_info("Configuration got peer endpoint = " << ip << ":" << port << ".");
+                //}
+            }
+            catch (std::exception & e)
+            {
+                log_error("Configuration failed to read a peer, what = " << e.what() << ".");
+            }
+        }
+        if (peers.size() > 0)
+        {
+            //overwrite harcoded peers in configuration
+            set_bootstrap_nodes(peers);
+        }
+        else
+        {
+            log_info("Configuration got empty bootstrap nodes. Using hardcoded.");
+        }
 
         /**
          * Get the network.tcp.port
@@ -353,6 +410,18 @@ bool configuration::save()
         pt.put(
             "network.udp.enable", std::to_string(m_network_udp_enable)
         );
+
+        /**
+         * Put the network.peers into property tree.
+         */
+        boost::property_tree::ptree peers;
+        for (auto &node : m_bootstrap_nodes)
+        {
+            boost::property_tree::ptree peer;
+            peer.put("", node.first + ":" + std::to_string(node.second));
+            peers.push_back(std::make_pair("", peer));
+        }
+        pt.put_child("network.peers", peers);
 
         /**
          * Put the rpc.port into property tree.

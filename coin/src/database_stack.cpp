@@ -72,13 +72,14 @@ void database_stack::start(const std::uint16_t & port, const bool & is_client)
         /**
          * Add the hard-coded bootstrap contacts.
          */
-    contacts.push_back(std::make_pair("n00.vanilla.cash", 51280));
-    contacts.push_back(std::make_pair("n01.vanilla.cash", 54526));
-    contacts.push_back(std::make_pair("n02.vanilla.cash", 34003));
-    contacts.push_back(std::make_pair("n03.vcash.info", 38495));
-    contacts.push_back(std::make_pair("n04.vcash.info", 34621));
-    contacts.push_back(std::make_pair("n05.vanilla.cash", 51167));
-        
+		contacts = stack_impl_.get_configuration().bootstrap_nodes();
+#if 0
+		contacts.push_back(std::make_pair("n01.vcashproject.org", 35409));
+		contacts.push_back(std::make_pair("n02.vcashproject.org", 58589));
+		contacts.push_back(std::make_pair("n03.vcash.info", 38495));
+		contacts.push_back(std::make_pair("n04.vcash.info", 34621));
+#endif
+
         /**
          * Set the port.
          */
@@ -87,8 +88,8 @@ void database_stack::start(const std::uint16_t & port, const bool & is_client)
         /**
          * Set the operation mode.
          */
-        stack_config.set_operation_mode(
-            is_client ? database::stack::configuration::operation_mode_interface :
+        stack_config.set_operation_mode(is_client ?
+            database::stack::configuration::operation_mode_interface :
             database::stack::configuration::operation_mode_storage
         );
         
@@ -100,7 +101,10 @@ void database_stack::start(const std::uint16_t & port, const bool & is_client)
         /**
          * Join the database::stack.
          */
-        join(contacts);
+        if (contacts.size() > 0)
+        {
+            join(contacts);
+        }
     }
 #endif // USE_DATABASE_STACK
 

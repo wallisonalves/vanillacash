@@ -64,30 +64,21 @@ void stack::start(const std::map<std::string, std::string> & args)
         }
         else
         {
-            stack_impl_->get_configuration().bootstrap_nodes().push_back(
-                std::make_pair("18.208.18.183", 53918)
-            );
-            stack_impl_->get_configuration().bootstrap_nodes().push_back(
-                std::make_pair("75.118.119.73", 57200)
-            );
-            stack_impl_->get_configuration().bootstrap_nodes().push_back(
-                std::make_pair("86.5.209.208", 60043)
-            );
-            stack_impl_->get_configuration().bootstrap_nodes().push_back(
-                std::make_pair("104.236.230.134", 37115)
-            );
-            stack_impl_->get_configuration().bootstrap_nodes().push_back(
-                std::make_pair("137.135.51.197", 37558)
-            );
-            stack_impl_->get_configuration().bootstrap_nodes().push_back(
-                std::make_pair("139.6.3.101", 41086)
-            );
-            stack_impl_->get_configuration().bootstrap_nodes().push_back(
-                std::make_pair("172.110.10.240", 58663)
-            );
-            stack_impl_->get_configuration().bootstrap_nodes().push_back(
-                std::make_pair("185.168.8.109", 38495)
-            );
+            stack_impl_->get_configuration().bootstrap_nodes();
+#if 0
+			stack_impl_->get_configuration().bootstrap_nodes().push_back(
+				std::make_pair("104.236.249.241", 35409)
+			);
+			stack_impl_->get_configuration().bootstrap_nodes().push_back(
+				std::make_pair("138.68.165.224", 58589)
+			);
+			stack_impl_->get_configuration().bootstrap_nodes().push_back(
+				std::make_pair("185.14.185.144", 38495)
+			);
+			stack_impl_->get_configuration().bootstrap_nodes().push_back(
+				std::make_pair("163.172.142.82", 34621)
+			);
+#endif
         }
 
         /**
@@ -281,7 +272,7 @@ void stack::chainblender_start()
 {
     if (stack_impl_)
     {
-        stack_impl_->chainblender_stop();
+        stack_impl_->chainblender_start();
     }
     else
     {

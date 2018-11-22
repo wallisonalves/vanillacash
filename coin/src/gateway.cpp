@@ -35,36 +35,36 @@ struct route;
 
 struct rt_metrics
 {
-	u_int32_t rmx_locks;
-	u_int32_t rmx_mtu;
-	u_int32_t rmx_hopcount;
-	int32_t rmx_expire;
-	u_int32_t rmx_recvpipe;
-	u_int32_t rmx_sendpipe;
-	u_int32_t rmx_ssthresh;
-	u_int32_t rmx_rtt;
-	u_int32_t rmx_rttvar;
-	u_int32_t rmx_pksent;
-	u_int32_t rmx_filler[4];
+    u_int32_t rmx_locks;
+    u_int32_t rmx_mtu;
+    u_int32_t rmx_hopcount;
+    int32_t rmx_expire;
+    u_int32_t rmx_recvpipe;
+    u_int32_t rmx_sendpipe;
+    u_int32_t rmx_ssthresh;
+    u_int32_t rmx_rtt;
+    u_int32_t rmx_rttvar;
+    u_int32_t rmx_pksent;
+    u_int32_t rmx_filler[4];
 };
 
 struct rt_msghdr
 {
-	u_short	rtm_msglen;
-	u_char	rtm_version;
-	u_char	rtm_type;
-	u_short	rtm_index;
-	int	rtm_flags;
-	int	rtm_addrs;
-	pid_t	rtm_pid;
-	int	rtm_seq;
-	int	rtm_errno;
-	int	rtm_use;
-	u_int32_t rtm_inits;
-	struct rt_metrics rtm_rmx;
+    u_short rtm_msglen;
+    u_char rtm_version;
+    u_char rtm_type;
+    u_short rtm_index;
+    int rtm_flags;
+    int rtm_addrs;
+    pid_t rtm_pid;
+    int rtm_seq;
+    int rtm_errno;
+    int rtm_use;
+    u_int32_t rtm_inits;
+    struct rt_metrics rtm_rmx;
 };
 
-#define RTM_VERSION	5
+#define RTM_VERSION 5
 
 #define RTAX_DST 0
 #define RTAX_GATEWAY 1
@@ -116,7 +116,7 @@ boost::asio::ip::address gateway::default_route(
 
         if (address_is_loopback(it->destination) == false)
         {
-			break;
+            break;
         }
     }
 #else
@@ -338,7 +338,7 @@ std::vector<gateway::network_interface_t> gateway::routes(
     int mib[6] = { CTL_NET, PF_ROUTE, 0, AF_UNSPEC, NET_RT_DUMP, 0 };
 
     std::size_t len = 0;
-	
+
     if (sysctl(mib, 6, 0, &len, 0, 0) < 0)
     {
         ec = boost::system::error_code(
@@ -365,7 +365,7 @@ std::vector<gateway::network_interface_t> gateway::routes(
     char * end = buf.get() + len;
 
     rt_msghdr * rtm;
-	
+
     for (char * next = buf.get(); next < end; next += rtm->rtm_msglen)
     {
         rtm = (rt_msghdr *)next;
@@ -374,7 +374,7 @@ std::vector<gateway::network_interface_t> gateway::routes(
         {
             continue;
         }
-		
+
         network_interface_t r;
         
         if (parse_rt_msghdr(rtm, r))
@@ -382,7 +382,7 @@ std::vector<gateway::network_interface_t> gateway::routes(
             ret.push_back(r);
         }
     }
-	
+
 #elif (defined _MSC_VER)
     HMODULE iphlp = LoadLibrary(TEXT("Iphlpapi.dll"));
         
@@ -430,19 +430,19 @@ std::vector<gateway::network_interface_t> gateway::routes(
             )
         {
             network_interface_t r;
-				
-			r.destination = boost::asio::ip::address::from_string(
+
+            r.destination = boost::asio::ip::address::from_string(
                 adapter->IpAddressList.IpAddress.String, ec
             );
                 
-			r.gateway = boost::asio::ip::address::from_string(
+            r.gateway = boost::asio::ip::address::from_string(
                 adapter->GatewayList.IpAddress.String, ec
             );
                 
-			r.netmask = boost::asio::ip::address::from_string(
+            r.netmask = boost::asio::ip::address::from_string(
                 adapter->IpAddressList.IpMask.String, ec
             );
-				
+
             strncpy(r.name, adapter->AdapterName, sizeof(r.name));
 
             if (ec)
@@ -491,7 +491,7 @@ std::vector<gateway::network_interface_t> gateway::routes(
     if (send(sock, nl_msg, nl_msg->nlmsg_len, 0) < 0)
     {
         ec = boost::system::error_code(
-        	errno, boost::asio::error::system_category
+            errno, boost::asio::error::system_category
         );
         
         close(sock);
@@ -504,7 +504,7 @@ std::vector<gateway::network_interface_t> gateway::routes(
     if (len < 0)
     {
         ec = boost::system::error_code(
-        	errno, boost::asio::error::system_category
+            errno, boost::asio::error::system_category
         );
         
         close(sock);

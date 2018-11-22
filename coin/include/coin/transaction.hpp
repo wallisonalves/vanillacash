@@ -235,7 +235,7 @@ namespace coin {
             /**
              * Fetch from memory and/or disk.
              * @param dbtx The db_tx.
-             * @param test_pool	List of pending changes to the transaction
+             * @param test_pool List of pending changes to the transaction
              * index database.
              * @param best_block True if being called to add a new best-block
              * to the chain.
@@ -268,9 +268,9 @@ namespace coin {
              * updated on disk.
              * @param[in] position_this_tx Position of this transaction on disk.
              * @param[in] ptr_block_index The pointer to a block_index.
-             * @param[in] connect_block	True if called from connect_block.
+             * @param[in] connect_block True if called from connect_block.
              * @param[in] create_new_block True if called from create_new_block.
-             * @param[in] strict_pay_to_script_hash	true if fully validating
+             * @param[in] strict_pay_to_script_hash true if fully validating
              * p2sh transactions.
              * @param check_signature If true we check the signature.
              * @param script_checker_checks If non-null we skip signature

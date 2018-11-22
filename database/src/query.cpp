@@ -133,7 +133,7 @@ std::string query::uri_decode(const std::string & sSrc)
     // for future extension"
     
     const std::uint8_t * pSrc = (const std::uint8_t *)sSrc.c_str();
-	const int SRC_LEN = sSrc.length();
+    const int SRC_LEN = sSrc.length();
     const std::uint8_t * SRC_END = pSrc + SRC_LEN;
     const std::uint8_t * SRC_LAST_DEC = SRC_END - 2;   // last decodable '%' 
 
@@ -142,8 +142,8 @@ std::string query::uri_decode(const std::string & sSrc)
     char * pEnd = pStart.get();
 
     while (pSrc < SRC_LAST_DEC)
-	{
-		if (*pSrc == '%')
+    {
+        if (*pSrc == '%')
         {
             char dec1, dec2;
             if (-1 != (dec1 = g_hex_2_dec[*(pSrc + 1)])
@@ -156,7 +156,7 @@ std::string query::uri_decode(const std::string & sSrc)
         }
 
         *pEnd++ = *pSrc++;
-	}
+    }
 
     // the last 2- chars
     while (pSrc < SRC_END)
@@ -164,7 +164,7 @@ std::string query::uri_decode(const std::string & sSrc)
         *pEnd++ = *pSrc++;
     }
 
-	return std::string(pStart.get(), pEnd);
+    return std::string(pStart.get(), pEnd);
 }
 
 const char g_safe[256] =
@@ -198,8 +198,8 @@ std::string query::uri_encode(const std::string & val)
     const std::uint8_t * const ptr_src_end = ptr_src + len_src;
 
     for (; ptr_src < ptr_src_end; ++ptr_src)
-	{
-		if (g_safe[*ptr_src])
+    {
+        if (g_safe[*ptr_src])
         {
             *ptr_end++ = *ptr_src;
         }
@@ -209,7 +209,7 @@ std::string query::uri_encode(const std::string & val)
             *ptr_end++ = dec_2_hex[*ptr_src >> 4];
             *ptr_end++ = dec_2_hex[*ptr_src & 0x0F];
         }
-	}
+    }
 
     return std::string((char *)ptr_start.get(), (char *)ptr_end);
 }

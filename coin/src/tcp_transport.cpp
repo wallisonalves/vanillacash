@@ -129,7 +129,7 @@ boost::system::error_code use_certificate_chain(SSL_CTX * ctx, char * buf)
         return ec;
     }
     
-	X509 * x = PEM_read_bio_X509(bio, 0, 0, 0);
+    X509 * x = PEM_read_bio_X509(bio, 0, 0, 0);
     
     if (x == 0)
     {
@@ -148,7 +148,7 @@ boost::system::error_code use_certificate_chain(SSL_CTX * ctx, char * buf)
     X509_free(x);
 
     X509 * ca = 0;
-		
+
     if (ctx->extra_certs != 0)
     {
         sk_X509_pop_free(ctx->extra_certs, X509_free), ctx->extra_certs = 0;

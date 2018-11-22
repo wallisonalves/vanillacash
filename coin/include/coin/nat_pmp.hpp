@@ -123,12 +123,12 @@ namespace coin {
                 std::uint16_t private_port;
                 std::uint16_t public_port;
                 std::uint32_t lifetime;
-        	} mapping_response_t;
+            } mapping_response_t;
 
-        	/**
-        	 * Converts an opcode to a string.
-        	 * @param opcode
-        	 */
+            /**
+             * Converts an opcode to a string.
+             * @param opcode
+             */
             static std::string opcode_to_string(const std::uint32_t &);
 
         private:

@@ -46,12 +46,12 @@ typedef struct EC_DHE_st
     EVP_PKEY_CTX * ctx_params;
     EVP_PKEY_CTX * ctx_keygen;
     EVP_PKEY_CTX * ctx_derive;
-	EVP_PKEY * privkey;
+    EVP_PKEY * privkey;
     EVP_PKEY * peerkey;
     EVP_PKEY * params;
 
     char * public_key;
-	unsigned char * shared_secret;
+    unsigned char * shared_secret;
     
 } EC_DHE;
 
@@ -130,21 +130,21 @@ static void EC_DHE_free(EC_DHE * ec_dhe)
  */
 static char * EC_DHE_getPublicKey(EC_DHE * ec_dhe, int * public_key_len)
 {
-	if (0 == (ec_dhe->ctx_params = EVP_PKEY_CTX_new_id(EVP_PKEY_EC, 0)))
+    if (0 == (ec_dhe->ctx_params = EVP_PKEY_CTX_new_id(EVP_PKEY_EC, 0)))
     {
         EC_DHE_handleErrors("Could not create EC_DHE contexts.");
         
         return 0;
     }
     
-	if (1 != EVP_PKEY_paramgen_init(ec_dhe->ctx_params))
+    if (1 != EVP_PKEY_paramgen_init(ec_dhe->ctx_params))
     {
         EC_DHE_handleErrors("Could not intialize parameter generation.");
         
         return 0;
     }
     
-	if (
+    if (
         1 != EVP_PKEY_CTX_set_ec_paramgen_curve_nid(
         ec_dhe->ctx_params, ec_dhe->EC_NID)
         )
@@ -154,13 +154,13 @@ static char * EC_DHE_getPublicKey(EC_DHE * ec_dhe, int * public_key_len)
         return 0;
     }
     
-	if (!EVP_PKEY_paramgen(ec_dhe->ctx_params, &ec_dhe->params))
+    if (!EVP_PKEY_paramgen(ec_dhe->ctx_params, &ec_dhe->params))
     {
         EC_DHE_handleErrors("Could not create parameter object parameters.");
         return 0;
     }
     
-	if (0 == (ec_dhe->ctx_keygen = EVP_PKEY_CTX_new(ec_dhe->params, 0)))
+    if (0 == (ec_dhe->ctx_keygen = EVP_PKEY_CTX_new(ec_dhe->params, 0)))
     {
         EC_DHE_handleErrors(
             "Could not create the context for the key generation"
@@ -169,15 +169,15 @@ static char * EC_DHE_getPublicKey(EC_DHE * ec_dhe, int * public_key_len)
         return 0;
     }
     
-	
-	if (1 != EVP_PKEY_keygen_init(ec_dhe->ctx_keygen))
+    
+    if (1 != EVP_PKEY_keygen_init(ec_dhe->ctx_keygen))
     {
         EC_DHE_handleErrors("Could not init context for key generation.");
         
         return 0;
     }
     
-	if (1 != EVP_PKEY_keygen(ec_dhe->ctx_keygen, &ec_dhe->privkey))
+    if (1 != EVP_PKEY_keygen(ec_dhe->ctx_keygen, &ec_dhe->privkey))
     {
         EC_DHE_handleErrors("Could not generate DHE keys in final step");
         
@@ -247,7 +247,7 @@ static unsigned char * EC_DHE_deriveSecretKey(
         EVP_PKEY_CTX_free(ec_dhe->ctx_derive), ec_dhe->ctx_derive = 0;
     }
     
-	if (0 == (ec_dhe->ctx_derive = EVP_PKEY_CTX_new(ec_dhe->privkey, 0)))
+    if (0 == (ec_dhe->ctx_derive = EVP_PKEY_CTX_new(ec_dhe->privkey, 0)))
     {
         EC_DHE_handleErrors(
             "Could not create the context for the shared secret derivation"
@@ -256,14 +256,14 @@ static unsigned char * EC_DHE_deriveSecretKey(
         return 0;
     }
     
-	if (1 != EVP_PKEY_derive_init(ec_dhe->ctx_derive))
+    if (1 != EVP_PKEY_derive_init(ec_dhe->ctx_derive))
     {
         EC_DHE_handleErrors("Could not init derivation context");
         
         return 0;
     }
     
-	if (1 != EVP_PKEY_derive_set_peer(ec_dhe->ctx_derive, ec_dhe->peerkey))
+    if (1 != EVP_PKEY_derive_set_peer(ec_dhe->ctx_derive, ec_dhe->peerkey))
     {
         EC_DHE_handleErrors(
             "Could not set the peer key into derivation context"
@@ -272,7 +272,7 @@ static unsigned char * EC_DHE_deriveSecretKey(
         return 0;
     }
     
-	if (1 != EVP_PKEY_derive(ec_dhe->ctx_derive, 0, &secret_len))
+    if (1 != EVP_PKEY_derive(ec_dhe->ctx_derive, 0, &secret_len))
     {
         EC_DHE_handleErrors(
             "Could not determine buffer length for shared secret"
@@ -286,7 +286,7 @@ static unsigned char * EC_DHE_deriveSecretKey(
         OPENSSL_free(ec_dhe->shared_secret), ec_dhe->shared_secret = 0;
     }
     
-	if (
+    if (
         0 == (ec_dhe->shared_secret =
         (unsigned char *)OPENSSL_malloc(secret_len))
         )
@@ -296,7 +296,7 @@ static unsigned char * EC_DHE_deriveSecretKey(
         return 0;
     }
     
-	if (
+    if (
         1 != (EVP_PKEY_derive(ec_dhe->ctx_derive, ec_dhe->shared_secret,
         &secret_len))
         )
@@ -308,7 +308,7 @@ static unsigned char * EC_DHE_deriveSecretKey(
     
     (*shared_secret_len) = (int)secret_len;
 
-	return ec_dhe->shared_secret;
+    return ec_dhe->shared_secret;
 }
 
 static void EC_DHE_handleErrors(const char * msg)

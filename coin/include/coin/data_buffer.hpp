@@ -53,19 +53,19 @@ namespace coin {
             /**
              * Constructor
              */
-			data_buffer()
-			    : m_read_ptr(0)
+            data_buffer()
+                : m_read_ptr(0)
                 , file_offset_(0)
-			{
-			    // ...
-			}
+            {
+                // ...
+            }
         
             /**
              * Constructor
              * @param f The file.
              */
             data_buffer(const std::shared_ptr<file> & f)
-			    : m_read_ptr(0)
+                : m_read_ptr(0)
                 , file_(f)
                 , file_offset_(f->ftell())
             {
@@ -76,62 +76,62 @@ namespace coin {
              * Copy constructor
              * @param other The other data_buffer.
              */
-			data_buffer(const data_buffer & other)
-			    : m_read_ptr(0)
+            data_buffer(const data_buffer & other)
+                : m_read_ptr(0)
                 , file_offset_(other.file_offset_)
                 , file_(other.file_)
-			{
+            {
                 clear();
                 
                 m_data.reserve(other.size());
 
-			    write_bytes(other.data(), other.size());
+                write_bytes(other.data(), other.size());
                 
                 m_read_ptr = m_data.size() > 0 ? &m_data[0] : 0;
-			}
+            }
         
             /**
              * Constructor
              * @param len The length.
              */
-			data_buffer(const std::size_t & len)
-			    : m_read_ptr(0)
+            data_buffer(const std::size_t & len)
+                : m_read_ptr(0)
                 , file_offset_(0)
-			{
+            {
                 m_data.reserve(len);
                 
-			    for (std::size_t i = 0; i < len; i++)
-			    {
-			        write_byte(0);   
-			    }
-			}
+                for (std::size_t i = 0; i < len; i++)
+                {
+                    write_byte(0);   
+                }
+            }
             
             /**
              * Constructor
              * @param buf The buffer.
              * @param len The length
              */
-			data_buffer(const char * buf, const std::size_t & len)
-			    : m_read_ptr(0)
+            data_buffer(const char * buf, const std::size_t & len)
+                : m_read_ptr(0)
                 , file_offset_(0)
-			{
-			    if (len > 0)
-			    {
+            {
+                if (len > 0)
+                {
                     m_data.reserve(len);
                     
-			        write_bytes(buf, len);
+                    write_bytes(buf, len);
                     
                     m_read_ptr = m_data.size() > 0 ? &m_data[0] : 0;
-			    }
-			}
+                }
+            }
 
-			void read_bytes(char * buf, const std::size_t & len)
-			{
-			    read(buf, len);
-			}
+            void read_bytes(char * buf, const std::size_t & len)
+            {
+                read(buf, len);
+            }
         
-			std::vector<char> read_bytes(const std::size_t & len)
-			{
+            std::vector<char> read_bytes(const std::size_t & len)
+            {
                 std::vector<char> ret(len);
                 
                 if (ret.size() > 0)
@@ -140,158 +140,158 @@ namespace coin {
                 }
                 
                 return ret;
-			}
+            }
             
-			std::uint8_t read_uint8()
-			{
-			    std::uint8_t ret;
-			    read(&ret, sizeof(ret));
-			    return ret;
-			}
+            std::uint8_t read_uint8()
+            {
+                std::uint8_t ret;
+                read(&ret, sizeof(ret));
+                return ret;
+            }
 
-			std::uint16_t read_uint16()
-			{
-			    std::uint16_t ret;
-			    read(&ret, sizeof(ret));
-			    return ret;
-			}
+            std::uint16_t read_uint16()
+            {
+                std::uint16_t ret;
+                read(&ret, sizeof(ret));
+                return ret;
+            }
 
-			std::int32_t read_int32()
-			{
-			    std::int32_t ret;
-			    read(&ret, sizeof(ret));
-			    return ret;
-			}
+            std::int32_t read_int32()
+            {
+                std::int32_t ret;
+                read(&ret, sizeof(ret));
+                return ret;
+            }
         
-			std::uint32_t read_uint32()
-			{
-			    std::uint32_t ret;
-			    read(&ret, sizeof(ret));
-			    return ret;
-			}
+            std::uint32_t read_uint32()
+            {
+                std::uint32_t ret;
+                read(&ret, sizeof(ret));
+                return ret;
+            }
 
-			std::int64_t read_int64()
-			{
-			    std::int64_t ret;
-			    read(&ret, sizeof(ret));
-				return ret;
-			}
+            std::int64_t read_int64()
+            {
+                std::int64_t ret;
+                read(&ret, sizeof(ret));
+                return ret;
+            }
         
-			std::uint64_t read_uint64()
-			{
-			    std::uint64_t ret;
-			    read(&ret, sizeof(ret));
-				return ret;
-			}
+            std::uint64_t read_uint64()
+            {
+                std::uint64_t ret;
+                read(&ret, sizeof(ret));
+                return ret;
+            }
             
-			void write_uint8(const std::uint8_t & val)
-			{
-			    write_byte(val);
-			}
+            void write_uint8(const std::uint8_t & val)
+            {
+                write_byte(val);
+            }
 
-			void write_uint16(const std::uint16_t & val)
-			{
-			    write((void *)&val, sizeof(val));
-			}
+            void write_uint16(const std::uint16_t & val)
+            {
+                write((void *)&val, sizeof(val));
+            }
 
-			void write_int32(const std::int32_t & val)
-			{
-			    write((void *)&val, sizeof(val));
-			}
+            void write_int32(const std::int32_t & val)
+            {
+                write((void *)&val, sizeof(val));
+            }
         
-			void write_uint32(const std::uint32_t & val)
-			{
-			    write((void *)&val, sizeof(val));
-			}
+            void write_uint32(const std::uint32_t & val)
+            {
+                write((void *)&val, sizeof(val));
+            }
 
-			void write_int64(const std::int64_t & val)
-			{
-			    write((void *)&val, sizeof(val));
-			}
+            void write_int64(const std::int64_t & val)
+            {
+                write((void *)&val, sizeof(val));
+            }
         
-			void write_uint64(const std::uint64_t & val)
-			{
-			    write((void *)&val, sizeof(val));
-			}
-			
-			void write_bytes(const char * buf, const std::size_t & len)
-			{    
-			    write((void *)buf, len);
-			}
+            void write_uint64(const std::uint64_t & val)
+            {
+                write((void *)&val, sizeof(val));
+            }
+            
+            void write_bytes(const char * buf, const std::size_t & len)
+            {    
+                write((void *)buf, len);
+            }
 
-			void write_byte(const std::uint8_t val)
-			{
-			    write((void *)&val, 1);
-			}
+            void write_byte(const std::uint8_t val)
+            {
+                write((void *)&val, 1);
+            }
 
-			char * data() const
-			{
+            char * data() const
+            {
                 if (m_data.size() > 0)
                 {
                     return const_cast<char *>(&m_data[0]);
                 }
                 
                 return 0;
-			}
+            }
         
             const char * read_ptr() const
             {
                 return m_read_ptr;
             }
 
-			const std::size_t size() const
-			{
-			    return m_data.size();
-			}
+            const std::size_t size() const
+            {
+                return m_data.size();
+            }
 
-			bool empty() const
-			{
-			    return m_data.size() == 0;
-			}
+            bool empty() const
+            {
+                return m_data.size() == 0;
+            }
 
-			void rewind()
-			{
-				m_read_ptr = m_data.size() > 0 ? &m_data[0] : 0;
-			}
+            void rewind()
+            {
+                m_read_ptr = m_data.size() > 0 ? &m_data[0] : 0;
+            }
 
-			void seek(const std::size_t & offset)
-			{
-			    if (offset > m_data.size())
-			    {
+            void seek(const std::size_t & offset)
+            {
+                if (offset > m_data.size())
+                {
                     assert(0);
-			    }
-			    else
-			    {
-			        m_read_ptr = &m_data[0] + offset;
-			    }
-			}
+                }
+                else
+                {
+                    m_read_ptr = &m_data[0] + offset;
+                }
+            }
 
-			void reserve(const std::size_t & len)
-			{
+            void reserve(const std::size_t & len)
+            {
                 m_data.reserve(len);
-			}
+            }
         
-			void resize(const std::size_t & len)
-			{
+            void resize(const std::size_t & len)
+            {
                 m_data.resize(len);
-			}
+            }
 
-			void clear()
-			{
+            void clear()
+            {
                 std::vector<char> empty;
                 
                 m_data.swap(empty);
 
-			    m_read_ptr = 0;
-			}
+                m_read_ptr = 0;
+            }
 
-			std::size_t remaining() const
-			{
-			    return (m_data.size() - (m_read_ptr - &m_data[0]));
-			}
+            std::size_t remaining() const
+            {
+                return (m_data.size() - (m_read_ptr - &m_data[0]));
+            }
 
-			void read(void * data, const std::size_t & len)
-			{
+            void read(void * data, const std::size_t & len)
+            {
                 if (file_)
                 {
                     if (file_->read(reinterpret_cast<char *>(data), len))
@@ -324,15 +324,15 @@ namespace coin {
 
                     m_read_ptr += len;
                 }
-			}
+            }
 
-			void write(void * data, const std::size_t & len)
-			{
+            void write(void * data, const std::size_t & len)
+            {
                 m_data.insert(
                     m_data.end(), reinterpret_cast<char *>(data),
                     reinterpret_cast<char *>(data) + len
                 );
-			}
+            }
         
             /**
              * Reads a variable length integer.
@@ -612,23 +612,23 @@ namespace coin {
             /**
              * Calculates the checksum of the data.
              */
-			std::uint32_t checksum()
-			{
-			    /**
-			     * Allocate the crc digest.
-			     */
-			    boost::crc_32_type digest;
+            std::uint32_t checksum()
+            {
+                /**
+                 * Allocate the crc digest.
+                 */
+                boost::crc_32_type digest;
 
-			    /**
-			     * Calculate the checksum.
-			     */
-			    digest.process_bytes(&m_data[0], m_data.size());
+                /**
+                 * Calculate the checksum.
+                 */
+                digest.process_bytes(&m_data[0], m_data.size());
 
-			    /**
-			     * Return the checksum.
-			     */
-			    return digest.checksum();
-			}
+                /**
+                 * Return the checksum.
+                 */
+                return digest.checksum();
+            }
 
             /**
              * The file.
@@ -656,7 +656,7 @@ namespace coin {
             {
                 clear();
                 
-			    write_bytes(other.data(), other.size());
+                write_bytes(other.data(), other.size());
                 
                 m_read_ptr = m_data.size() > 0 ? &m_data[0] : 0;
                 

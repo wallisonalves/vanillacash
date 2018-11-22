@@ -31,13 +31,14 @@
 #include <windows.h>
 #endif // (defined _WIN32 || defined WIN32) || (defined _WIN64 || defined WIN64)
 
+
+#include <iomanip>
+#include <chrono>
 #include <iostream>
 #include <fstream>
 #include <memory>
 #include <mutex>
 #include <sstream>
-
-#include <mutex>
 
 #include <coin/filesystem.hpp>
 
@@ -50,25 +51,25 @@ namespace coin {
     {
         public:
             
-			typedef enum severity
-			{
-				severity_none,
-				severity_debug,
-				severity_error,
-				severity_info,
-				severity_warning,
+            typedef enum severity
+            {
+                severity_none,
+                severity_debug,
+                severity_error,
+                severity_info,
+                severity_warning,
                 severity_test,
-			} severity_t;
-			
+            } severity_t;
+
             /**
              * Singleton accessor.
              */
-			static logger & instance()
-			{
-			    static logger g_logger;
+            static logger & instance()
+            {
+                static logger g_logger;
                 
-			    return g_logger;
-			}
+                return g_logger;
+            }
             
             /**
              * operator <<
@@ -91,14 +92,14 @@ namespace coin {
              * Perform the actual logging.
              * @param val
              */
-			void log(std::stringstream & val)
-			{
+            void log(std::stringstream & val)
+            {
                 std::lock_guard<std::recursive_mutex> l1(mutex_);
                 
-			    static const bool use_file = true;
+                static const bool use_file = true;
 
-			    if (use_file)
-			    {
+                if (use_file)
+                {
                     static std::string path =
                         filesystem::data_path() + "debug.log"
                     ;
@@ -126,49 +127,49 @@ namespace coin {
                         
                         ofstream_.flush();
                     }
-			    }
+                }
 
-			    static bool use_cout = true;
+                static bool use_cout = true;
 
-			    if (use_cout)
-			    {
+                if (use_cout)
+                {
 #if (defined _WIN32 || defined WIN32) || (defined _WIN64 || defined WIN64)
 #if defined(_UNICODE)
-			        DWORD len = MultiByteToWideChar(
-			            CP_ACP, 0, val.str().c_str(), -1, NULL, 0
-			        );
+                    DWORD len = MultiByteToWideChar(
+                        CP_ACP, 0, val.str().c_str(), -1, NULL, 0
+                    );
 
-			        std::unique_ptr<wchar_t> buf(new wchar_t[len]);
+                    std::unique_ptr<wchar_t> buf(new wchar_t[len]);
 
-			        MultiByteToWideChar(
-			            CP_ACP, 0, val.str().c_str(), -1, buf.get(), len
-			        );
+                    MultiByteToWideChar(
+                        CP_ACP, 0, val.str().c_str(), -1, buf.get(), len
+                    );
 
-			        OutputDebugString(buf.get());
-			        OutputDebugString(L"\n");
+                    OutputDebugString(buf.get());
+                    OutputDebugString(L"\n");
 
-			        std::cerr << val.str() << std::endl;
+                    std::cerr << val.str() << std::endl;
 #else
-			        OutputDebugString(val.str().c_str());
-			        OutputDebugString(L"\n");
+                    OutputDebugString(val.str().c_str());
+                    OutputDebugString(L"\n");
 
-			        std::cerr << val.str() << std::endl;
+                    std::cerr << val.str() << std::endl;
 #endif // _UNICODE
 #else // Not Windows.
 #if (defined __ANDROID__)
-					__android_log_print(
+                    __android_log_print(
                         ANDROID_LOG_DEBUG, "logger", val.str().c_str()
                     );
 #else
-			        std::cerr << val.str() << std::endl;
+                    std::cerr << val.str() << std::endl;
 #endif
 #endif // defined _WIN32 || defined WIN32) || (defined _WIN64 || defined WIN64
-			    }
-			}
+                }
+            }
             
         private:
         
-			// ...
+            // ...
             
         protected:
         
@@ -185,38 +186,40 @@ namespace coin {
     
     #define log_xx(severity, strm) \
     { \
+        std::time_t time_now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()); \
+        auto time_str = std::put_time(std::gmtime(&time_now), "%F %T"); \
         std::stringstream __ss; \
         switch (severity) \
         { \
             case coin::logger::severity_debug: \
-                __ss << "[DEBUG] - "; \
+                __ss << time_str << " [DEBUG] - "; \
             break; \
             case coin::logger::severity_error: \
-                __ss << "[ERROR] - "; \
+                __ss << time_str << " [ERROR] - "; \
             break; \
             case coin::logger::severity_info: \
-                __ss << "[INFO] - "; \
+                __ss << time_str << " [INFO] - "; \
             break; \
             case coin::logger::severity_warning: \
-                __ss << "[WARNING] - "; \
+                __ss << time_str << " [WARNING] - "; \
             break; \
             case coin::logger::severity_test: \
-                __ss << "[TEST] - "; \
+                __ss << time_str << " [TEST] - "; \
             break; \
             default: \
-                __ss << "[UNKNOWN] - "; \
+                __ss << time_str << " [UNKNOWN] - "; \
         } \
-		__ss << __FUNCTION__ << ": "; \
+        __ss << __FUNCTION__ << ": "; \
         __ss << strm; \
         coin::logger::instance() << __ss.str(); \
         __ss.str(std::string()); \
     } \
-	
+    
 #define log_none(strm) /** */
 #if (defined NDEBUG)
-#define log_debug(strm) log_none(strm)
+    #define log_debug(strm) log_none(strm)
 #else
-#define log_debug(strm) log_xx(coin::logger::severity_debug, strm)
+    #define log_debug(strm) log_xx(coin::logger::severity_debug, strm)
 #endif
 #define log_error(strm) log_xx(coin::logger::severity_error, strm)
 #define log_info(strm) log_xx(coin::logger::severity_info, strm)

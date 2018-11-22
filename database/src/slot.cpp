@@ -442,7 +442,7 @@ std::int32_t slot::id_from_endpoint2(const boost::asio::ip::udp::endpoint & ep)
         boost::asio::ip::address_v6::bytes_type bytes =
             ep.address().to_v6().to_bytes()
         ;
-		
+
         std::uint32_t * ip = reinterpret_cast<std::uint32_t *>(&bytes[0]);
 
         for (auto i = 0; i < bytes.size() / sizeof(std::uint32_t); i++)

@@ -46,7 +46,8 @@ std::map<std::uint32_t, std::uint32_t> kernel::get_stake_modifier_checkpoints()
         {250000, 1624198793}, {300000, 602008884}, {350000, 1784787616},
         {400000, 1333280594}, {450000, 725649406}, {500000, 3458528019},
         {550000, 3282845064}, {590000, 133848742}, {635000, 996299842},
-        {635900, 3660419094}, {645000, 139215092}
+        {635900, 3660419094}, {645000, 139215092}, {800000, 20944252},
+        {965000, 1001328551}, {1040000, 2018596371}
     };
 }
 
@@ -338,9 +339,9 @@ bool kernel::check_stake_modifier_checkpoints(
     auto stake_modifier_checkpoints = get_stake_modifier_checkpoints();
 
     if (stake_modifier_checkpoints.count(height) > 0)
-	{
+    {
         return checksum == stake_modifier_checkpoints[height];
-	}
+    }
     
     return true;
 }
@@ -745,9 +746,9 @@ bool kernel::check_stake_kernel_hash(
         get_kernel_stake_modifier(block_from.get_hash(), stake_modifier,
         stake_modifier_height, stake_modifier_time, print_pos) == false
         )
-	{
+    {
         return false;
-	}
+    }
 
     buffer.write_uint64(stake_modifier);
     buffer.write_uint32(time_block_from);
@@ -788,9 +789,9 @@ bool kernel::check_stake_kernel_hash(
      * Check if the proof-of-stake hash meets target protocol.
      */
     if (big_number(hash_pos) > coin_day_weight * target_per_coin_day)
-	{
+    {
         return false;
-	}
+    }
     
     return true;
 }
@@ -856,9 +857,9 @@ bool kernel::get_kernel_stake_modifier(
                 return false;
             }
             else
-			{
+            {
                 return false;
-			}
+            }
         }
         
         index = index->block_index_next();
